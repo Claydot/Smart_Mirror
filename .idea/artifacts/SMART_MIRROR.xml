@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="SMART_MIRROR">
+    <output-path>$PROJECT_DIR$/out/artifacts/SMART_MIRROR</output-path>
+    <root id="root">
+      <element id="archive" name="SMART_MIRROR.jar">
+        <element id="module-output" name="SMART_MIRROR" />
+      </element>
+    </root>
+  </artifact>
+</component>
