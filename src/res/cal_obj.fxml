@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<Pane prefHeight="46.0" prefWidth="359.0">
+    <children>
+        <Text id="time" fill="WHITE" layoutX="280.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10:10am  12:10pm" textAlignment="JUSTIFY" wrappingWidth="78.6708984375" />
+        <Text id="des" fill="WHITE" layoutX="63.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ME 3057" textAlignment="RIGHT" wrappingWidth="202.97021484375">
+            <font>
+                <Font size="25.0" />
+            </font>
+        </Text>
+    </children>
+</Pane>
