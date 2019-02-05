@@ -48,7 +48,7 @@ public class Main extends Application {
     @Override
     public void start(Stage ps) throws Exception{
         this.primaryStage = ps;
-        Parent root = FXMLLoader.load(getClass().getResource("../res/smart_mirror.fxml")); //already updated for path location
+        Parent root = FXMLLoader.load(getClass().getResource("/res/smart_mirror.fxml")); //already updated for path location
         primaryStage.setTitle("Hello World");
         mainS = new Scene(root);
         primaryStage.setScene(mainS);
@@ -232,7 +232,7 @@ public class Main extends Application {
             if (start_date != current_date) {
                 //add to tomorrow
                 tomorrow_l.add(cal);
-                FXMLLoader cal_o = new FXMLLoader(getClass().getResource("../res/cal_obj.fxml"));
+                FXMLLoader cal_o = new FXMLLoader(getClass().getResource("/res/cal_obj.fxml"));
                 Pane l = null;
                 try {
                     l = cal_o.load();
@@ -250,7 +250,7 @@ public class Main extends Application {
                 //add to today
                 today_l.add(cal);
 
-                FXMLLoader cal_o = new FXMLLoader(getClass().getResource("../res/cal_obj.fxml"));
+                FXMLLoader cal_o = new FXMLLoader(getClass().getResource("/res/cal_obj.fxml"));
                 Pane l = null;
                 try {
                     l = cal_o.load();
