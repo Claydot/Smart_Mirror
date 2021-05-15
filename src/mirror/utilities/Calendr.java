@@ -41,6 +41,11 @@ public class Calendr {
 
     public static ArrayList<CalObject> cal_format() {
         Calendar cal = get_cal();
+        if (cal == null) {
+            //if error in retrieving calendar
+
+            return null;
+        }
         ComponentList c = cal.getComponents();
         ArrayList<CalObject> returnList = new ArrayList<>();
         //create data structure for each day

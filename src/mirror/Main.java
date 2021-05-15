@@ -75,7 +75,6 @@ public class Main extends Application {
         weatherHelper();
         calendarHelper();
         verseOfDayHelper();
-        //use tasks?
 
         new Thread(() -> {
 
@@ -94,6 +93,7 @@ public class Main extends Application {
             while (true) {
                 try {
                     Thread.sleep(60000 * 10); //update every 10 minutes
+                    //Thread.sleep(30000);
                 } catch (InterruptedException e) {
 
                 }
@@ -113,37 +113,29 @@ public class Main extends Application {
     public void clockHelper() {
         Text b = (Text) mainS.lookup("#time");
 
-        //long tim = time.getTime();
-        //time.setTime(tim + (System.currentTimeMillis() - start)); //not working correctly
         time.setTime(System.currentTimeMillis());
         String t = time.toString();
         b.setText(t.substring(t.length() - 17, t.length() - 12));
-        //System.out.println("t");
 
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         String strDate= formatter.format(date);
 
-
         Text dates = (Text) mainS.lookup("#date");
         dates.setText(strDate);
-
-
-
     }
 
     public void weatherHelper() {
         //get Weather api
         //from data, determine what gif to display
         ImageView weather = (ImageView) mainS.lookup("#weather_icon");
-
-
-
         Weather.getWeather();
-        
+        if (Forecast.icon == null) {
+            return;
+        }
 
 
-        //case structure for all things
+            //case structure for all things
         if (Forecast.icon.equals("clear-day")) {
             weather.setImage(new Image("res/images/weather/sun.gif"));
         } else if (Forecast.icon.equals("clear-night")) {
@@ -171,8 +163,6 @@ public class Main extends Application {
         }
 
 
-
-
         Text sum = (Text) mainS.lookup("#weather_sum");
         sum.setText(Forecast.summary);
 
@@ -191,7 +181,9 @@ public class Main extends Application {
     public void calendarHelper() {
 
         ArrayList<CalObject> calendar_list = Calendr.cal_format();
-
+        if (calendar_list ==null) {
+            return;
+        }
         //calendar_list.get(0).start
 
         Date date = new Date();
@@ -205,9 +197,6 @@ public class Main extends Application {
         nt.setVisible(true);
         nc.setManaged(true);
         nc.setVisible(true);
-
-
-
         //then update u
         VBox today = (VBox) mainS.lookup("#calendar_today");
         List<Node> t = today.getChildren();
@@ -215,7 +204,6 @@ public class Main extends Application {
             today.getChildren().remove(2, t.size());
             this.remove_c = true;
         }
-
 
         VBox tomorrow = (VBox) mainS.lookup("#calendar_tomorrow");
         List<Node> ta = tomorrow.getChildren();
@@ -277,7 +265,9 @@ public class Main extends Application {
 
     public void verseOfDayHelper() {
         String verse = Bible.getBible();
-
+        if (verse == "") {
+            return;
+        }
         Text b = (Text) mainS.lookup("#verse");
         b.setText(verse);
     }

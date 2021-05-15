@@ -1,0 +1,43 @@
+<html><head>
+  <SCRIPT src="http://java.com/js/dtjava.js"></SCRIPT>
+<script>
+    function launchApplication(jnlpfile) {
+        dtjava.launch(            {
+                url : 'SMART_MIRROR.jnlp'
+            },
+            {
+                javafx : '8.0+'
+            },
+            {}
+        );
+        return false;
+    }
+</script>
+
+<script>
+    function javafxEmbedSMART_MIRROR_id() {
+        dtjava.embed(
+            {
+                id : 'SMART_MIRROR_id',
+                url : 'SMART_MIRROR.jnlp',
+                placeholder : 'javafx-app-placeholder',
+                width : '1080',
+                height : '1920'
+            },
+            {
+                javafx : '8.0+'
+            },
+            {}
+        );
+    }
+    <!-- Embed FX application into web page once page is loaded -->
+    dtjava.addOnloadCallback(javafxEmbedSMART_MIRROR_id);
+</script>
+
+</head><body>
+<h2>Test page for <b>SMART_MIRROR</b></h2>
+  <b>Webstart:</b> <a href='SMART_MIRROR.jnlp' onclick="return launchApplication('SMART_MIRROR.jnlp');">click to launch this app as webstart</a><br><hr><br>
+
+  <!-- Applet will be inserted here -->
+  <div id='javafx-app-placeholder'></div>
+</body></html>
