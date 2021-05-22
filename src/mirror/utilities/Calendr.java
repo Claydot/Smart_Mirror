@@ -17,10 +17,10 @@ public class Calendr {
     private static long weekMs = 86400000 * 7; //ms in a week
 
 
-    public static Calendar get_cal() {
+    public static Calendar get_cal(String url) {
         try {
             //https://calendar.google.com/calendar/ical/bv8f27bcpvmhfpkru70smsr1dc%40group.calendar.google.com/private-f64d67c4f772f38cc4ced4e21f2ff8e3/basic.ics
-            InputStream is = new URL("https://calendar.google.com/calendar/ical/bv8f27bcpvmhfpkru70smsr1dc%40group.calendar.google.com/private-f64d67c4f772f38cc4ced4e21f2ff8e3/basic.ics").openStream();
+            InputStream is = new URL(url).openStream();
 
             try {
 
@@ -39,13 +39,8 @@ public class Calendr {
         return null;
     }
 
-    public static ArrayList<CalObject> cal_format() {
-        Calendar cal = get_cal();
-        if (cal == null) {
-            //if error in retrieving calendar
-
-            return null;
-        }
+    public static ArrayList<CalObject> cal_format(String url) {
+        Calendar cal = get_cal(url);
         ComponentList c = cal.getComponents();
         ArrayList<CalObject> returnList = new ArrayList<>();
         //create data structure for each day
@@ -122,9 +117,9 @@ public class Calendr {
         Collections.sort(returnList);
         return returnList;
     }
-
+/**
     public static void main(String... args) {
     cal_format();
     }
-
+*/
 }

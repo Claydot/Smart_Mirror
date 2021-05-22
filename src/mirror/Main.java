@@ -11,16 +11,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import mirror.utilities.*;
-import org.xml.sax.XMLReader;
-import java.net.URL;
+
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 public class Main extends Application {
@@ -36,6 +32,27 @@ public class Main extends Application {
     private boolean calendar_add;
 
     public static void main(String[] args) {
+
+        /**
+        try (OutputStream output = new FileOutputStream("mirror.properties")) {
+
+            Properties prop = new Properties();
+
+            // set the properties value
+            prop.setProperty("calendar", "https://calendar.google.com/calendar/ical/bv8f27bcpvmhfpkru70smsr1dc%40group.calendar.google.com/private-f64d67c4f772f38cc4ced4e21f2ff8e3/basic.ics");
+            //prop.setProperty("db.user", "mkyong");
+            //prop.setProperty("db.password", "password");
+
+            // save properties to project root folder
+            prop.store(output, null);
+
+            System.out.println(prop);
+
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+
+**/
         launch(args);
     }
 
@@ -70,11 +87,28 @@ public class Main extends Application {
     }
 
     public void app() {
+        //Insert Read properties
+        Properties prop = new Properties();
+
+        try {
+            FileReader input = new FileReader("mirror.properties");
+            prop.load(input);
+
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+        // GET properties out of properties
+        String url = (String) prop.get("calendar");
+
+        String[] loc = ((String) prop.get("location")).split(",");
+
+
 
         clockHelper();
         weatherHelper();
-        calendarHelper();
+        calendarHelper(url);
         verseOfDayHelper();
+        //use tasks?
 
         new Thread(() -> {
 
@@ -93,7 +127,6 @@ public class Main extends Application {
             while (true) {
                 try {
                     Thread.sleep(60000 * 10); //update every 10 minutes
-                    //Thread.sleep(30000);
                 } catch (InterruptedException e) {
 
                 }
@@ -101,7 +134,7 @@ public class Main extends Application {
                     weatherHelper();
                 });
                 Platform.runLater(() -> {
-                    calendarHelper();
+                    calendarHelper(url);
                 });
                 verseOfDayHelper();
                 //update verse only once a day
@@ -113,29 +146,62 @@ public class Main extends Application {
     public void clockHelper() {
         Text b = (Text) mainS.lookup("#time");
 
+        //long tim = time.getTime();
+        //time.setTime(tim + (System.currentTimeMillis() - start)); //not working correctly
         time.setTime(System.currentTimeMillis());
         String t = time.toString();
-        b.setText(t.substring(t.length() - 17, t.length() - 12));
+        String time = t.substring(t.length() - 17, t.length() - 12);
+
+        // convert from military to normal
+        if (true) {
+
+            String hour = time.substring(0,2);
+            int hr = Integer.parseInt(hour);
+            int hr_conv = hr % 12;
+            if (hr_conv == 0) {
+                hr_conv = 12;
+            }
+            time = Integer.toString(hr_conv) + time.substring(2, time.length());
+
+            // Don't Like current pm am format
+            if (false){
+                if (hr / 12 == 1) {
+                    time = time.concat("pm");
+                } else {
+                    time = time.concat("am");
+                }
+
+            }
+
+        }
+
+        b.setText(time);
+        //System.out.println("t");
 
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         String strDate= formatter.format(date);
 
+
         Text dates = (Text) mainS.lookup("#date");
         dates.setText(strDate);
+
+
+
     }
 
     public void weatherHelper() {
         //get Weather api
         //from data, determine what gif to display
         ImageView weather = (ImageView) mainS.lookup("#weather_icon");
+
+
+
         Weather.getWeather();
-        if (Forecast.icon == null) {
-            return;
-        }
+        
 
 
-            //case structure for all things
+        //case structure for all things
         if (Forecast.icon.equals("clear-day")) {
             weather.setImage(new Image("res/images/weather/sun.gif"));
         } else if (Forecast.icon.equals("clear-night")) {
@@ -163,6 +229,8 @@ public class Main extends Application {
         }
 
 
+
+
         Text sum = (Text) mainS.lookup("#weather_sum");
         sum.setText(Forecast.summary);
 
@@ -178,12 +246,10 @@ public class Main extends Application {
 
     }
 
-    public void calendarHelper() {
+    public void calendarHelper(String url) {
 
-        ArrayList<CalObject> calendar_list = Calendr.cal_format();
-        if (calendar_list ==null) {
-            return;
-        }
+        ArrayList<CalObject> calendar_list = Calendr.cal_format(url);
+
         //calendar_list.get(0).start
 
         Date date = new Date();
@@ -197,6 +263,9 @@ public class Main extends Application {
         nt.setVisible(true);
         nc.setManaged(true);
         nc.setVisible(true);
+
+
+
         //then update u
         VBox today = (VBox) mainS.lookup("#calendar_today");
         List<Node> t = today.getChildren();
@@ -204,6 +273,7 @@ public class Main extends Application {
             today.getChildren().remove(2, t.size());
             this.remove_c = true;
         }
+
 
         VBox tomorrow = (VBox) mainS.lookup("#calendar_tomorrow");
         List<Node> ta = tomorrow.getChildren();
@@ -265,9 +335,7 @@ public class Main extends Application {
 
     public void verseOfDayHelper() {
         String verse = Bible.getBible();
-        if (verse == "") {
-            return;
-        }
+
         Text b = (Text) mainS.lookup("#verse");
         b.setText(verse);
     }
